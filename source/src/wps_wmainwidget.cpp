@@ -11,6 +11,12 @@
 #include <QTextEdit>
 #include <QPushButton>
 
+const int LAYOUT_SPACING = 0;				//set the spacing of layout;
+
+const int MARGIN_TOP = 0;
+const int MARGIN_BOTTOM = 0;
+const int MARGIN_LEFT = 10;
+const int MARGING_RIGHT = 10;
 
 WPS_WMainWidget::WPS_WMainWidget(QWidget * parent): QWidget(parent)
 {
@@ -21,25 +27,21 @@ WPS_WMainWidget::~WPS_WMainWidget()
 {
 }
 
-void WPS_WMainWidget::setupUi()
+void WPS_WMainWidget::setupTitleBarUi()
 {
-	QVBoxLayout *mainLayout = new QVBoxLayout(this);
-
 	//set title bar
 	m_titleBar = new WPS_WTitleBar;
 	m_titleBar->setObjectName("m_titleBar");
-	mainLayout->addWidget(m_titleBar);
 
-	//add spaceing to set left and right contro in center
-	QWidget *topSpaceWidget = new QWidget;
-	topSpaceWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	mainLayout->addWidget(topSpaceWidget);
+	QLayout *layout = m_titleBar->layout();
+	setLayoutUi(layout);
+}
 
-
+void WPS_WMainWidget::setupSelectUi()
+{
 	//set select file layout
 	QHBoxLayout *selectFileLayout = new QHBoxLayout;
-	selectFileLayout->setSpacing(0);
-	selectFileLayout->setContentsMargins(0, 0, 0, 0);
+	setLayoutUi(selectFileLayout);
 	
 	m_leftEdit = new QLineEdit;
 	m_leftEdit->setObjectName("m_leftEdit");
@@ -67,14 +69,13 @@ void WPS_WMainWidget::setupUi()
 	m_selectWidget = new QWidget;
 	m_selectWidget->setObjectName("m_selectWidget");
 	m_selectWidget->setLayout(selectFileLayout);
+}
 
-	mainLayout->addWidget(m_selectWidget);
-
-
+void WPS_WMainWidget::setupNameUi()
+{
 	//set file name layout;
 	QHBoxLayout *fileNameLayout = new QHBoxLayout;
-	fileNameLayout->setSpacing(0);
-	fileNameLayout->setContentsMargins(0, 0, 0, 0);
+	setLayoutUi(fileNameLayout);
 
 	m_leftLabel = new QLabel;
 	m_leftLabel->setObjectName("m_leftLabel");
@@ -88,14 +89,13 @@ void WPS_WMainWidget::setupUi()
 	m_nameWidget = new QWidget;
 	m_nameWidget->setObjectName("m_selectWidget");
 	m_nameWidget->setLayout(fileNameLayout);
+}
 
-	mainLayout->addWidget(m_nameWidget);
-
-
+void WPS_WMainWidget::setupTextUi()
+{
 	//set file content layout;
 	QHBoxLayout	*textLayout = new QHBoxLayout;
-	textLayout->setSpacing(0);
-	textLayout->setContentsMargins(0, 0, 0, 0);
+	setLayoutUi(textLayout);
 
 	m_leftText = new QTextEdit;
 	m_leftText->setObjectName("m_leftText");
@@ -109,28 +109,69 @@ void WPS_WMainWidget::setupUi()
 	m_textWidget = new QWidget;
 	m_textWidget->setObjectName("m_textWidget");
 	m_textWidget->setLayout(textLayout);
+}
 
-	mainLayout->addWidget(m_textWidget);
-
+void WPS_WMainWidget::setupChangedUi()
+{
+	//set file content layout;
+	QHBoxLayout	*changedLayout = new QHBoxLayout;
+	setLayoutUi(changedLayout);
 
 	m_changeText = new QTextEdit;
 	m_changeText->setObjectName("m_changeText");
-	
-	mainLayout->addWidget(m_changeText);
-	
 
-	QWidget *bottomSpaceWidget = new QWidget;
-	bottomSpaceWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	mainLayout->addWidget(bottomSpaceWidget);
+	changedLayout->addWidget(m_changeText);
 
+	m_changeWidget = new QWidget;
+	m_changeWidget->setObjectName("m_changeWidget");
+	m_changeWidget->setLayout(changedLayout);
+}
+
+void WPS_WMainWidget::setLayoutUi(QLayout *layout)
+{
+	layout->setSpacing(LAYOUT_SPACING);
+	layout->setContentsMargins(MARGIN_LEFT, MARGIN_TOP, MARGING_RIGHT, MARGIN_BOTTOM);
+}
+
+
+void WPS_WMainWidget::setupUi()
+{
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
+	setupTitleBarUi();
+	setupSelectUi();
+	setupNameUi();
+	setupTextUi();
+	setupChangedUi();
+
+	if (!(NULL == m_titleBar)) {
+		mainLayout->addWidget(m_titleBar);
+	}
+
+	if (!(NULL == m_selectWidget)) {
+		mainLayout->addWidget(m_selectWidget);
+	}
+
+	if (!(NULL == m_nameWidget)) {
+		mainLayout->addWidget(m_nameWidget);
+	}
+
+	if (!(NULL == m_textWidget)) {
+		mainLayout->addWidget(m_textWidget);
+	}
+
+	if (!(NULL == m_changeWidget)) {
+		mainLayout->addWidget(m_changeText);
+	}
 	
 	mainLayout->setSpacing(0);
-	mainLayout->setContentsMargins(10, 0, 10, 0);
-
-	
+	mainLayout->setContentsMargins(0, 0, 0, 0);
 	
 	setWindowFlags(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_DeleteOnClose);
+
+	setFocus();
+	setFocusProxy(m_leftEdit);
 	
 	retranslateUi();
 	setConnect();
@@ -198,6 +239,13 @@ void WPS_WMainWidget::changeEvent(QEvent * event)
     }
 }
 
+void WPS_WMainWidget::slotReturnPressed()
+{
+}
+
+void WPS_WMainWidget::slotClicked()
+{
+}
 
 
 

@@ -2,6 +2,7 @@
 #include "wps_wtitlebar.h"
 
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 
@@ -17,9 +18,13 @@ WPS_WTitleBar::~WPS_WTitleBar()
 void WPS_WTitleBar::setupUi()		//to setup ui
 {
 	QHBoxLayout *mainLayout = new QHBoxLayout(this);
+	QHBoxLayout *rightTopLayout = new QHBoxLayout;
+	QVBoxLayout *rightLayout = new QVBoxLayout;
+	
 	m_titleLabel = new QLabel;
 	m_closeBtn = new QPushButton;
 	m_minBtn = new QPushButton;
+	QLabel *spaceLabel = new QLabel;
 
 	QWidget *spaceWidget = new QWidget;
 	spaceWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -31,13 +36,24 @@ void WPS_WTitleBar::setupUi()		//to setup ui
 	m_closeBtn->setFocusPolicy(Qt::NoFocus);
 	m_minBtn->setFocusPolicy(Qt::NoFocus);
 
+	rightTopLayout->setSpacing(0);
+	rightTopLayout->setContentsMargins(0, 0, 0, 0);
+	rightLayout->setSpacing(0);
+	rightLayout->setContentsMargins(0, 0, 0, 0);
 	mainLayout->setSpacing(0);
 	mainLayout->setContentsMargins(0, 0, 0, 0);
+	
+	
+	rightTopLayout->addWidget(spaceWidget);
+	rightTopLayout->addWidget(m_minBtn);
+	rightTopLayout->addSpacing(5);
+	rightTopLayout->addWidget(m_closeBtn);
+
+	rightLayout->addLayout(rightTopLayout);
+	rightLayout->addWidget(spaceLabel);
 
 	mainLayout->addWidget(m_titleLabel);
-	mainLayout->addWidget(spaceWidget);
-	mainLayout->addWidget(m_minBtn);
-	mainLayout->addWidget(m_closeBtn);
+	mainLayout->addLayout(rightLayout);
 	
 	retranslateUi();
 	setConnect();

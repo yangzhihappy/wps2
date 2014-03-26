@@ -14,9 +14,11 @@ WPS_WMainWidget
 /*set titlebar widget qss style start */
 WPS_WMainWidget > WPS_WTitleBar#m_titleBar
 {
-	height: 20px;
-	min-height: 20px;
-	max-height: 20px;
+	height: 30px;
+	min-height: 30px;
+	max-height: 30px;
+
+	border: none;
 }
 
 WPS_WTitleBar > QLabel#m_titleLabel
@@ -26,12 +28,12 @@ WPS_WTitleBar > QLabel#m_titleLabel
 
 WPS_WTitleBar > QPushButton
 {
-	width: 16px;
-	height: 16px;
-	max-width: 16px;
-	max-height: 16px;
-	min-width: 16px;
-	min-height: 16px;
+	width: 20px;
+	height: 20px;
+	max-width: 20px;
+	max-height: 20px;
+	min-width: 20px;
+	min-height: 20px;
 	
 	border: 1px solid;
 
@@ -53,28 +55,29 @@ WPS_WTitleBar > QPushButton:pressed
 
 WPS_WTitleBar > QPushButton#m_minBtn
 {
-	border-image: url(:/image/wps_min.png);
+	image: url(:/image/wps_min.png);
 }
 
 WPS_WTitleBar > QPushButton#m_closeBtn
 {
-	border-image: url(:/image/wps_close.png);
+	image: url(:/image/wps_close.png);
 }
 
 
 /*set select widget qss style start*/
 WPS_WMainWidget > QWidget#m_selectWidget
 {
-	height: 30px;
-	min-height: 30px;
-	max-height: 30px;
+	height: 32px;
+	min-height: 32px;
+	max-height: 32px;
 
-	border-top: 0px solid;
+	border-top: 1px solid;
 	border-left: 0px solid;
 	border-right: 0px solid;
 	border-bottom: 1px solid;
 
 	border-bottom-color: rgb(179, 179, 179);
+	border-top-color: rgb(179, 179, 179);
 }
 
 
@@ -123,6 +126,31 @@ WPS_WMainWidget > QWidget#m_selectWidget > QPushButton:hover
 {
 	background-color: rgba(229, 255, 242, 100%);
 	border-color: rgba(76, 191, 131, 30%);
+}
+
+
+WPS_WMainWidget > QWidget#m_textWidget
+{
+	height: 310px;
+
+	border-top: 0px solid;
+	border-left: 0px solid;
+	border-right: 0px solid;
+	border-bottom: 1px solid;
+
+	border-bottom-color: rgb(179, 179, 179);
+}
+
+WPS_WMainWidget > QWidget#m_changeWidget
+{
+	height: 100px;
+
+	border-top: 0px solid;
+	border-left: 0px solid;
+	border-right: 0px solid;
+	border-bottom: 1px solid;
+
+	border-bottom-color: rgb(179, 179, 179);
 }
 
 

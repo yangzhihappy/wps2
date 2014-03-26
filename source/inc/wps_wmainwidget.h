@@ -10,6 +10,7 @@ class QLabel;
 class QLineEdit;
 class QTextEdit;
 class QPushButton;
+class QLayout;
 
 class WPS_WMainWidget : public QWidget
 {
@@ -18,7 +19,8 @@ public:
 	WPS_WMainWidget(QWidget * parent = 0);
 	virtual ~WPS_WMainWidget();
 private slots:
-	
+	void slotReturnPressed();
+	void slotClicked();
 protected:
 	virtual void setupUi();		//to setup ui
 	virtual void retranslateUi();	//used for update to translate ui from one language to another
@@ -28,6 +30,14 @@ protected:
 	void changeEvent(QEvent * event);
 private:
 	void setConnect();			//set ui signal and slot
+
+	void setupTitleBarUi();
+	void setupSelectUi();
+	void setupNameUi();
+	void setupTextUi();
+	void setupChangedUi();
+
+	void setLayoutUi(QLayout *);
 private:
 	QPoint				m_globalPos;		//mark start pos when move to calculate pos;
 	QPoint				m_localPos;			//mark start pos used to move;
@@ -49,7 +59,7 @@ private:
 	QWidget		*m_textWidget;
 	
 	QTextEdit	*m_changeText;		//used to merge the defference between left file and right file
-	
+	QWidget		*m_changeWidget;
 };
 
 
