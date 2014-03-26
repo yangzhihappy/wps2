@@ -1,0 +1,13 @@
+
+WPS_WMainWidget
+{
+	width: 820px;
+	height: 690px;
+	background-color: rgb(255, 255, 255);
+	border: 1px rgb(179, 179, 179);
+}
+
+
+
+
+
