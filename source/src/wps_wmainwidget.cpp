@@ -10,6 +10,8 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QFile>
 
 const int LAYOUT_SPACING = 0;				//set the spacing of layout;
 
@@ -57,13 +59,26 @@ void WPS_WMainWidget::setupSelectUi()
 	m_rightBtn->setObjectName("m_leftBtn");
 	m_rightBtn->setFocusPolicy(Qt::NoFocus);
 
+	m_leftClearBtn= new QPushButton;
+	m_leftClearBtn->setObjectName("m_leftClearBtn");
+	m_leftClearBtn->setFocusPolicy(Qt::NoFocus);
+	m_leftClearBtn->setVisible(false);
+
+	m_rightClearBtn= new QPushButton;
+	m_rightClearBtn->setObjectName("m_rightClearBtn");
+	m_rightClearBtn->setFocusPolicy(Qt::NoFocus);
+	m_rightClearBtn->setVisible(false);
+	
+
 	selectFileLayout->addWidget(m_leftEdit);
 	selectFileLayout->addSpacing(1);
 	selectFileLayout->addWidget(m_leftBtn);
+	selectFileLayout->addWidget(m_leftClearBtn);
 	selectFileLayout->addSpacing(5);
 	selectFileLayout->addWidget(m_rightEdit);
 	selectFileLayout->addSpacing(1);
 	selectFileLayout->addWidget(m_rightBtn);
+	selectFileLayout->addWidget(m_rightClearBtn);
 	selectFileLayout->addSpacing(5);
 
 	m_selectWidget = new QWidget;
@@ -184,11 +199,28 @@ void WPS_WMainWidget::retranslateUi()
 	}
 	
 	if (!(NULL == m_leftBtn)) {
-		m_leftBtn->setText("Select");
+		m_leftBtn->setText(tr("选择"));
 	}
 
 	if (!(NULL == m_rightBtn)) {
-		m_rightBtn->setText("Select");
+		m_rightBtn->setText(tr("选择"));
+	}
+
+	if (!(NULL == m_leftClearBtn)) {
+		m_leftClearBtn->setText(tr("清除"));
+	}
+
+	if (!(NULL == m_rightClearBtn)) {
+		m_rightClearBtn->setText(tr("清除"));
+	}
+
+	if (!(NULL == m_leftEdit)) {
+		m_leftEdit->setPlaceholderText(tr("请您输入或选择文件路径按回车"));
+	}
+
+	if (!(NULL == m_rightEdit)) {
+		m_rightEdit->setPlaceholderText(tr(""));
+		m_rightEdit->setPlaceholderText(tr("请您输入或选择文件路径按回车"));
 	}
 }
 
@@ -197,6 +229,30 @@ void WPS_WMainWidget::setConnect()
 	if (!(NULL == m_titleBar)) {
 		connect(m_titleBar, SIGNAL(sigClose()), this, SLOT(close()));
 		connect(m_titleBar, SIGNAL(sigMin()), this, SLOT(showMinimized()));
+	}
+
+	if (!(NULL == m_leftEdit)) {
+		connect(m_leftEdit, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+	}
+
+	if (!(NULL == m_rightEdit)) {
+		connect(m_rightEdit, SIGNAL(returnPressed()), this, SLOT(slotReturnPressed()));
+	}
+
+	if (!(NULL == m_leftBtn)) {
+		connect(m_leftBtn, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	}
+
+	if (!(NULL == m_rightBtn)) {
+		connect(m_rightBtn, SIGNAL(clicked()), this, SLOT(slotClicked()));
+	}
+
+	if (!(NULL == m_leftClearBtn)) {
+		connect(m_leftClearBtn, SIGNAL(clicked()), this, SLOT(slotClear()));
+	}
+
+	if (!(NULL == m_rightClearBtn)) {
+		connect(m_rightClearBtn, SIGNAL(clicked()), this, SLOT(slotClear()));
 	}
 }
 
@@ -241,9 +297,119 @@ void WPS_WMainWidget::changeEvent(QEvent * event)
 
 void WPS_WMainWidget::slotReturnPressed()
 {
+	QObject *senderObj = sender();
+	QLineEdit * edit = dynamic_cast<QLineEdit *>(senderObj);
+
+	if (NULL == edit) {
+		return;
+	}
+
+	QString fileName = edit->text();
+	if (fileName.isEmpty()) {
+		fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "~/project/wps/source");
+	}
+
+	if (fileName.isEmpty()) {
+		return;
+	}
+
+	if (m_leftEdit == senderObj) {
+		m_leftFileName = fileName;
+		updateLeftUi();
+	} else {
+		m_rightFileName = fileName;
+		updateRightUi();
+	}
+
 }
 
 void WPS_WMainWidget::slotClicked()
+{
+	QObject *senderObj = sender();
+	QString fileName = "";
+
+	fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "~/project/wps/source");
+
+	if (fileName.isEmpty()) {
+		return;
+	}
+
+	if (m_leftBtn== senderObj) {
+		m_leftFileName = fileName;
+		updateLeftUi();
+	} else {
+		m_rightFileName = fileName;
+		updateRightUi();
+	}
+}
+
+void WPS_WMainWidget::slotClear()
+{
+	QObject *senderObj = sender();
+	
+	if (m_leftClearBtn == senderObj) {
+		m_leftFileName = "";
+		updateLeftUi();
+	} else {
+		m_rightFileName = "";
+		updateRightUi();
+	}
+}
+
+void WPS_WMainWidget::updateLeftUi()
+{
+	if (m_leftFileName.isEmpty()) {
+		m_leftLabel->setText("");
+		m_leftEdit->clear();
+		m_leftText->clear();
+		m_leftBtn->setVisible(true);
+		m_leftClearBtn->setVisible(false);
+		return;
+	}
+
+	m_leftBtn->setVisible(false);
+	m_leftClearBtn->setVisible(true);
+
+	m_leftEdit->setText(m_leftFileName);
+	m_leftLabel->setText(m_leftFileName);
+
+	QFile leftFile(m_leftFileName);
+	if (!leftFile.exists()) {
+		m_leftFileName = "";
+		return updateLeftUi();		
+	}
+	leftFile.open(QFile::ReadOnly);
+	m_leftText->setText(QString(leftFile.readAll()));
+	leftFile.close();
+}
+
+void WPS_WMainWidget::updateRightUi()
+{
+	if (m_rightFileName.isEmpty()) {
+		m_rightLabel->setText("");
+		m_rightEdit->clear();
+		m_rightText->clear();
+		m_rightBtn->setVisible(true);
+		m_rightClearBtn->setVisible(false);
+		return;
+	}
+
+	m_rightBtn->setVisible(false);
+	m_rightClearBtn->setVisible(true);
+	m_rightEdit->setText(m_rightFileName);
+	m_rightLabel->setText(m_rightFileName);
+
+	QFile rightFile(m_rightFileName);
+	if (!rightFile.exists()) {
+		m_rightFileName = "";
+		return updateRightUi();		
+	}
+	rightFile.open(QFile::ReadOnly);
+	m_rightText->setText(QString(rightFile.readAll()));
+	rightFile.close();
+}
+
+void WPS_WMainWidget::updateChangedUi()
 {
 }
 

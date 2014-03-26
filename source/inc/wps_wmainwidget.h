@@ -21,6 +21,7 @@ public:
 private slots:
 	void slotReturnPressed();
 	void slotClicked();
+	void slotClear();
 protected:
 	virtual void setupUi();		//to setup ui
 	virtual void retranslateUi();	//used for update to translate ui from one language to another
@@ -28,6 +29,10 @@ protected:
 	void mousePressEvent(QMouseEvent * event);
 	void mouseMoveEvent(QMouseEvent * event);
 	void changeEvent(QEvent * event);
+
+	void updateLeftUi();
+	void updateRightUi();
+	void updateChangedUi();
 private:
 	void setConnect();			//set ui signal and slot
 
@@ -48,6 +53,8 @@ private:
 	QLineEdit	*m_rightEdit;
 	QPushButton	*m_leftBtn;			//used to select file by dialog
 	QPushButton	*m_rightBtn;
+	QPushButton	*m_leftClearBtn;
+	QPushButton	*m_rightClearBtn;
 	QWidget		*m_selectWidget;	//used to add select control
 
 	QLabel		*m_leftLabel;		//used to show file name;
@@ -60,6 +67,9 @@ private:
 	
 	QTextEdit	*m_changeText;		//used to merge the defference between left file and right file
 	QWidget		*m_changeWidget;
+
+	QString		m_leftFileName;
+	QString		m_rightFileName;
 };
 
 
