@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 		file.close();
     }
 
-	WPS_WMainWidget wps;
-	wps.show();
+	WPS_WMainWidget *wps = new WPS_WMainWidget;
+	wps->show();
 
     return app.exec();
 }

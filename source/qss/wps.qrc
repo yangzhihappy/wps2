@@ -2,6 +2,8 @@
 <RCC>
     <qresource prefix="/">
         <file>wps.qss</file>
+        <file>image/wps_close.png</file>
+        <file>image/wps_min.png</file>
     </qresource>
 </RCC>
 
