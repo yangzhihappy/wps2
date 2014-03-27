@@ -70,6 +70,7 @@ private:
 
 	QString		m_leftFileName;
 	QString		m_rightFileName;
+	QString		m_changedFileName;
 };
 
 

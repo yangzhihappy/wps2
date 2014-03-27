@@ -2,6 +2,7 @@
 #include "wps_wmainwidget.h"
 
 #include "wps_wtitlebar.h"
+#include "wps_common_manner.h"
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
@@ -22,6 +23,10 @@ const int MARGING_RIGHT = 10;
 
 WPS_WMainWidget::WPS_WMainWidget(QWidget * parent): QWidget(parent)
 {
+	m_leftFileName = "";
+	m_rightFileName = "";
+	m_changedFileName = "";
+
 	setupUi();
 }
 
@@ -381,6 +386,8 @@ void WPS_WMainWidget::updateLeftUi()
 	leftFile.open(QFile::ReadOnly);
 	m_leftText->setText(QString(leftFile.readAll()));
 	leftFile.close();
+
+	updateChangedUi();
 }
 
 void WPS_WMainWidget::updateRightUi()
@@ -407,10 +414,31 @@ void WPS_WMainWidget::updateRightUi()
 	rightFile.open(QFile::ReadOnly);
 	m_rightText->setText(QString(rightFile.readAll()));
 	rightFile.close();
+
+	updateChangedUi();
 }
 
+#include <QtDebug>
 void WPS_WMainWidget::updateChangedUi()
 {
+	if (m_changedFileName.isEmpty()) {
+		m_changedFileName = WPS_Common_Manner::random_fileName();
+	} else {
+		QFile::remove(m_changedFileName);
+		m_changeText->clear();
+	}
+	WPS_Common_Manner::wps_cmp_file(m_leftFileName, m_rightFileName, m_changedFileName);
+
+	qDebug() << "before set text....";
+	QFile file(m_changedFileName);
+	if (!file.exists()) {
+		m_changeText->clear();
+		return;
+	}
+	qDebug() << "file exists !";
+	file.open(QFile::ReadOnly);
+	m_changeText->setText(QString(file.readAll()));
+	file.close();
 }
 
 
