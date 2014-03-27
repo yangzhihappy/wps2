@@ -22,6 +22,8 @@ private slots:
 	void slotReturnPressed();
 	void slotClicked();
 	void slotClear();
+	void slotTextChanged();
+	void slotClose();
 protected:
 	virtual void setupUi();		//to setup ui
 	virtual void retranslateUi();	//used for update to translate ui from one language to another
@@ -43,6 +45,7 @@ private:
 	void setupChangedUi();
 
 	void setLayoutUi(QLayout *);
+	void saveText();
 private:
 	QPoint				m_globalPos;		//mark start pos when move to calculate pos;
 	QPoint				m_localPos;			//mark start pos used to move;
@@ -71,6 +74,8 @@ private:
 	QString		m_leftFileName;
 	QString		m_rightFileName;
 	QString		m_changedFileName;
+
+	bool		m_isChanged;
 };
 
 

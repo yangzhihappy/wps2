@@ -3,6 +3,7 @@
 
 #include "wps_wtitlebar.h"
 #include "wps_common_manner.h"
+#include "wps_confirm_wdialog.h"
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
@@ -129,6 +130,9 @@ void WPS_WMainWidget::setupTextUi()
 	m_textWidget = new QWidget;
 	m_textWidget->setObjectName("m_textWidget");
 	m_textWidget->setLayout(textLayout);
+
+	m_leftText->setReadOnly(true);
+	m_rightText->setReadOnly(true);
 }
 
 void WPS_WMainWidget::setupChangedUi()
@@ -152,7 +156,6 @@ void WPS_WMainWidget::setLayoutUi(QLayout *layout)
 	layout->setSpacing(LAYOUT_SPACING);
 	layout->setContentsMargins(MARGIN_LEFT, MARGIN_TOP, MARGING_RIGHT, MARGIN_BOTTOM);
 }
-
 
 void WPS_WMainWidget::setupUi()
 {
@@ -232,7 +235,7 @@ void WPS_WMainWidget::retranslateUi()
 void WPS_WMainWidget::setConnect()
 {
 	if (!(NULL == m_titleBar)) {
-		connect(m_titleBar, SIGNAL(sigClose()), this, SLOT(close()));
+		connect(m_titleBar, SIGNAL(sigClose()), this, SLOT(slotClose()));
 		connect(m_titleBar, SIGNAL(sigMin()), this, SLOT(showMinimized()));
 	}
 
@@ -258,6 +261,10 @@ void WPS_WMainWidget::setConnect()
 
 	if (!(NULL == m_rightClearBtn)) {
 		connect(m_rightClearBtn, SIGNAL(clicked()), this, SLOT(slotClear()));
+	}
+
+	if (!(NULL == m_changeText)) {
+		connect(m_changeText, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	}
 }
 
@@ -361,6 +368,44 @@ void WPS_WMainWidget::slotClear()
 	}
 }
 
+void WPS_WMainWidget::slotTextChanged()
+{
+	if (m_changeText == sender()) {
+		m_isChanged = true;
+	}
+}
+
+void WPS_WMainWidget::slotClose()
+{
+	if (!m_isChanged) {
+		this->close();
+		return;
+	}
+	
+	WPS_Confirm_WDialog dlg;
+	dlg.setTitle("text is changed, do you want to save it ?");
+	dlg.exec();
+
+	if (QDialog::Accepted == dlg.result()) {
+		saveText();
+	}
+
+	
+	this->close();
+}
+
+void WPS_WMainWidget::saveText()
+{
+	QFile::remove(m_changedFileName);
+	
+	QFile file(m_changedFileName);
+
+	file.open(QIODevice::WriteOnly);
+	QString text = m_changeText->toPlainText();
+	file.write(text.toUtf8().data());
+	file.close();
+}
+
 void WPS_WMainWidget::updateLeftUi()
 {
 	if (m_leftFileName.isEmpty()) {
@@ -427,6 +472,7 @@ void WPS_WMainWidget::updateChangedUi()
 		QFile::remove(m_changedFileName);
 		m_changeText->clear();
 	}
+	
 	WPS_Common_Manner::wps_cmp_file(m_leftFileName, m_rightFileName, m_changedFileName);
 
 	qDebug() << "before set text....";
@@ -439,6 +485,8 @@ void WPS_WMainWidget::updateChangedUi()
 	file.open(QFile::ReadOnly);
 	m_changeText->setText(QString(file.readAll()));
 	file.close();
+
+	m_isChanged = false;
 }
 
 

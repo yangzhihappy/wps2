@@ -18,20 +18,16 @@ CODECFORSRC = UTF8
 SOURCES += main.cpp \
 	src/wps_wmainwidget.cpp \
 	src/wps_wtitlebar.cpp \
-	src/wps_common_manner.cpp
+	src/wps_common_manner.cpp \
+	src/wps_confirm_wdialog.cpp
 
 HEADERS  += inc/wps_wmainwidget.h \
 	inc/wps_wtitlebar.h \
-	inc/wps_common_manner.h
+	inc/wps_common_manner.h \
+	inc/wps_confirm_wdialog.h
 
 RESOURCES += \
     qss/wps.qrc
-
-
-
-
-
-
 
 
 

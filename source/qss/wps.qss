@@ -122,7 +122,7 @@ WPS_WMainWidget > QWidget#m_selectWidget > QPushButton:hover
 	border-color: rgba(76, 191, 131, 30%);
 }
 
-WPS_WMainWidget > QWidget#m_selectWidget > QPushButton:hover
+WPS_WMainWidget > QWidget#m_selectWidget > QPushButton:pressed
 {
 	background-color: rgba(229, 255, 242, 100%);
 	border-color: rgba(76, 191, 131, 30%);
@@ -151,6 +151,50 @@ WPS_WMainWidget > QWidget#m_changeWidget
 	border-bottom: 1px solid;
 
 	border-bottom-color: rgb(179, 179, 179);
+}
+
+
+WPS_Confirm_WDialog
+{
+	width: 380px;
+	height: 120px;
+	min-width: 380px;
+	min-height: 120px;
+	max-width: 380px;
+	max-height: 120px;
+
+	background-color: rgb(242, 242, 242);
+	border: 1px rgb(179, 179, 179);
+}
+
+WPS_Confirm_WDialog > QPushButton
+{
+	width: 120px;
+	height: 30px;
+	min-width : 120px;
+	min-height: 30px;
+	max-width: 120px;
+	max-height: 30px;
+
+	font-size: 14px;
+	color: rgb(0, 115, 230);
+	border: 1px solid;
+
+	background-color: rgba(255, 255, 255, 255);
+	border-color: rgba(255, 255, 255, 100%);
+}
+
+
+WPS_Confirm_WDialog > QPushButton:hover
+{
+	background-color: rgba(229, 255, 242, 30%);
+	border-color: rgba(76, 191, 131, 30%);
+}
+
+WPS_Confirm_WDialog > QPushButton:pressed
+{
+	background-color: rgba(229, 255, 242, 100%);
+	border-color: rgba(76, 191, 131, 30%);
 }
 
 
